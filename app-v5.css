@@ -1,0 +1,57 @@
+
+:root{--index-h:50px;--active-h:45px;--safe-bottom:env(safe-area-inset-bottom,0px)}
+/* kompaktiškas sticky progresas */
+.index{scrollbar-width:none}.index::-webkit-scrollbar{display:none}
+.index a{transition:background .18s ease,box-shadow .18s ease,color .18s ease;padding:8px 11px}
+.index a.partial{background:#1d4ed8}.index a.complete{background:#16a34a}
+.index a.active{box-shadow:inset 0 0 0 2px #fbbf24,0 0 0 1px rgba(255,255,255,.15)}
+.active-day-bar{position:sticky;top:var(--index-h);z-index:19;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-bottom:1px solid #cbd5e1;box-shadow:0 2px 8px rgba(15,23,42,.08);padding:6px 10px 7px;color:#0f172a}
+.active-day-main{display:flex;align-items:center;gap:7px;min-height:28px}
+.active-day-summary{font-size:12.5px;font-weight:900;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.active-day-summary .day-name{color:#0f4f82}.active-day-summary .overall{color:#475569}.active-day-summary .pct{color:#15803d}
+.active-day-track{height:4px;background:#e2e8f0;border-radius:99px;overflow:hidden}.active-day-fill{height:100%;width:0;background:#16a34a;transition:width .2s ease}
+.menu-wrap{position:relative;flex:0 0 auto}.menu-btn{width:30px;height:28px;border:0;border-radius:8px;background:#e2e8f0;color:#0f172a;font-size:20px;line-height:24px;font-weight:900;cursor:pointer}
+.quick-menu{position:absolute;right:0;top:34px;width:218px;background:#fff;border:1px solid #cbd5e1;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.22);padding:6px;display:none;z-index:80}
+.quick-menu.open{display:block}.quick-menu button{display:block;width:100%;border:0;background:#fff;text-align:left;padding:10px;border-radius:8px;font:700 12px system-ui;color:#0f172a;cursor:pointer}.quick-menu button:active{background:#f1f5f9}.quick-menu .muted{color:#64748b;font-weight:650}
+.offline-toast{position:fixed;left:50%;bottom:calc(64px + var(--safe-bottom));transform:translateX(-50%);z-index:120;max-width:90vw;background:#0f172a;color:#fff;border-radius:999px;padding:9px 13px;font:750 11px system-ui;box-shadow:0 8px 24px rgba(0,0,0,.26);opacity:0;pointer-events:none;transition:opacity .2s}.offline-toast.show{opacity:1}
+
+/* kortelės: aprašymas suskleistas, veiksmai vienoje eilėje */
+.step{scroll-margin-top:calc(var(--index-h) + var(--active-h) + 10px)}
+.step-grid{margin-bottom:7px}.step-grid>div{min-width:0}
+.desc{margin:0}.addr{margin:5px 0 4px}
+.stop-details{margin:7px 0 0;border:1px solid #dbe2ea;border-radius:9px;background:#f8fafc;overflow:hidden}
+.stop-details summary{list-style:none;cursor:pointer;padding:8px 10px;font-size:11.5px;font-weight:900;color:#0f4f82;display:flex;align-items:center;justify-content:space-between}
+.stop-details summary::-webkit-details-marker{display:none}.stop-details summary:after{content:'▾';font-size:15px;color:#64748b}.stop-details[open] summary:after{content:'▴'}
+.stop-details-body{padding:0 10px 10px;font-size:12px;color:#334155;line-height:1.42}
+.stop-details-body p{margin:0 0 7px}.practical{background:#fff;border-left:3px solid #0f766e;padding:7px 8px;border-radius:0 7px 7px 0;color:#334155}.practical strong{color:#0f766e}
+.step-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:8px}
+.step-actions .btn,.visit-btn{margin:0!important;min-width:0;width:100%;display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 7px;border-radius:10px;border:0;text-align:center;text-decoration:none;font:850 12.5px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;cursor:pointer}
+.step-actions .btn{background:#1769aa;color:#fff}.step-actions .btn.walk{background:#7c3aed}
+.visit-btn{background:#334155;color:#fff}.step.visited{background:#f0fdf4}.step.visited .visit-btn{background:#15803d}.step.visited .title:before{content:'✓ ';color:#15803d}.step.visited .step-grid{opacity:.76}
+
+/* plaukiojantis valdymas */
+.fab-dock{position:fixed;right:9px;bottom:calc(9px + var(--safe-bottom));z-index:40;display:flex;align-items:center;gap:6px;filter:drop-shadow(0 5px 14px rgba(0,0,0,.24))}
+.next-fab{border:0;border-radius:999px;background:#1769aa;color:#fff;padding:11px 13px;min-height:41px;font:850 12px system-ui;cursor:pointer;white-space:nowrap}.next-fab:active{transform:translateY(1px)}
+.map-fab{width:41px;height:41px;flex:0 0 41px;border:0;border-radius:999px;background:#0f766e;color:#fff;font-size:19px;line-height:41px;text-align:center;padding:0;cursor:pointer}.map-fab:active{transform:translateY(1px)}
+.focus-step{outline:3px solid #38bdf8;outline-offset:-3px}
+
+/* pilno ekrano progreso žemėlapis */
+.map-dialog{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#f8fafc;color:#0f172a}
+.map-dialog::backdrop{background:rgba(2,6,23,.55)}.map-shell{height:100dvh;display:flex;flex-direction:column}
+.map-head{background:#0f172a;color:#fff;padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;display:flex;align-items:center;gap:8px}
+.map-head strong{font-size:15px;flex:1}.map-close{width:34px;height:34px;border:0;border-radius:9px;background:#334155;color:#fff;font-size:21px;cursor:pointer}
+.map-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;padding:7px 8px;background:#fff;border-bottom:1px solid #e2e8f0}
+.map-tabs button{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:8px 4px;font:850 11px system-ui;color:#334155}.map-tabs button.active{background:#1769aa;color:#fff;border-color:#1769aa}
+#tripMap{flex:1;min-height:260px;background:#dbeafe;position:relative}.map-loading{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:1000;background:rgba(15,23,42,.9);color:#fff;padding:7px 10px;border-radius:999px;font:750 10.5px system-ui;pointer-events:none}
+.map-stats{background:#fff;border-top:1px solid #cbd5e1;padding:8px 10px calc(8px + var(--safe-bottom));display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;font-size:11.5px}
+.map-stats b{font-size:13px}.map-legend{grid-column:1/-1;color:#64748b;font-size:10px;line-height:1.25}
+.route-marker{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 7px rgba(0,0,0,.35);font:900 10px system-ui;color:#fff}.route-marker.done{background:#16a34a}.route-marker.todo{background:#1769aa}.route-marker.next{background:#d97706}.route-marker.walk{outline:2px solid #7c3aed}
+.gps-marker{width:18px;height:18px;border-radius:50%;background:#2563eb;border:4px solid #fff;box-shadow:0 0 0 4px rgba(37,99,235,.25)}
+.leaflet-popup-content{font:12px/1.35 system-ui}.leaflet-control-attribution{font-size:9px!important}
+
+/* mažas ekranas */
+@media(max-width:420px){
+  .day{margin:8px}.step{padding:10px 10px 12px}.photo{width:96px;height:72px;flex-basis:96px}.title{font-size:14.5px}.meta{font-size:11.5px}.addr{font-size:10.8px}.active-day-bar{padding-left:8px;padding-right:8px}
+  .step-actions .btn,.visit-btn{min-height:40px;font-size:11.7px;padding:9px 5px}.fab-dock{right:7px}.next-fab{padding:10px 11px;font-size:11.5px}.map-fab{width:39px;height:39px;flex-basis:39px;line-height:39px}
+}
+@media print{.fab-dock,.visit-btn,.active-day-bar,.map-dialog,.stop-details summary{display:none!important}.stop-details{border:0;background:transparent}.stop-details-body{display:block!important;padding:0}.step.visited .step-grid{opacity:1}.step.visited{background:#fff}.step.visited .title:before{content:''}}

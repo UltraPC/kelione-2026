@@ -1,0 +1,40 @@
+KELIONĖ 2026 PWA v5 – PATIKROS ATASKAITA
+Data: 2026-09-08
+
+MARŠRUTŲ INVARIANTAI
+- Stotelių: 65
+- Dienų: 9
+- Automobilio navigacijos etapų: 37
+- Pėsčiųjų etapų: 28
+- Maršruto SHA-256 prieš/po UI transformacijos:
+  68fb3769d843dcd1912601236eef84d1f6509dfc9c7a6faeef3d7815297139ab
+- Rezultatas: IDENTIŠKAS. Dienos, stotelės, laikai, adresai ir Google Maps URL nepakeisti.
+
+ĮGYVENDINTA
+- VAŽIUOTI/EITI ir APLANKYTA vienoje eilėje.
+- Pašalintas didelis progreso baneris; paliktas kompaktiškas sticky progresas.
+- 65 aprašymai suskleidžiami po „APIE VIETĄ“ ir papildomi praktine informacija.
+- Pilno ekrano žemėlapis: VISA KELIONĖ / ŠI DIENA / LIKO.
+- Aplankyta/liekanti dalis spalvinama; rodoma kita stotelė ir telefono GPS vieta.
+- Rodomi automobilio etapų, planinio vairavimo laiko ir orientacinių km skaičiai.
+- Orientaciniai km vieną kartą skaičiuojami per OSRM/OpenStreetMap ir išsaugomi telefone.
+- Geokodavimas atliekamas palaipsniui, rezultatai išsaugomi localStorage.
+- PWA diegimas neprivalomas; offline kopija ruošiama automatiškai.
+- navigator.storage.persist() prašomas po vartotojo veiksmo.
+- Service Worker v5: offline shell + automatinis atnaujinimas.
+- 65 įterptų nuotraukų pakartojimai prieš pateikiant puslapį deduplikuojami iki 18 unikalių.
+- Transformuoto HTML bandymo dydis ~1.86 MB vietoje ~6.81 MB.
+
+STATINIAI TESTAI
+- app-v5.js: Node sintaksė OK.
+- sw.js: Node sintaksė OK.
+- manifest.webmanifest: JSON OK.
+- Service Worker transformacijos testas: 65 data-img nuorodos / 18 unikalių nuotraukų.
+- Senas progreso CSS ir JS po transformacijos pašalinami.
+- Nauji app-v5.css ir app-v5.js įterpiami.
+- Maršruto hash po transformacijos nepakeistas.
+
+PASTABA
+GitHub ChatGPT integracija rašymo operacijoms grąžino HTTP 403
+„Resource not accessible by integration“, todėl live repozitorija nebuvo pakeista.
+Šis ZIP yra paruoštas tiesioginiam įkėlimui į repozitorijos šaknį.
