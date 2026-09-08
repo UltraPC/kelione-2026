@@ -1,0 +1,19 @@
+{
+  "name": "Kelionės navigacija 2026",
+  "short_name": "Kelionė 2026",
+  "description": "Rugsėjo 8–16 d. kelionės maršrutai, stotelės ir Google Maps navigacija.",
+  "lang": "lt",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1769aa",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
