@@ -81,7 +81,6 @@
     const tools=document.createElement('div'); tools.className='trip-tools';
     tools.innerHTML=`<div class="trip-progress-line"><span>Kelionės progresas</span><span id="overallProgress">0 / ${allSteps.length}</span></div>
       <div class="progress-track"><div class="progress-fill" id="overallFill"></div></div>
-      <div class="trip-tools-actions"><button class="tool-btn" id="undoVisited" type="button">↶ ATŠAUKTI PASKUTINĮ</button><button class="tool-btn reset" id="resetVisited" type="button">ATSTATYTI VISKĄ</button></div>
       <button class="install-btn" id="installPwa" type="button">ĮDIEGTI Į TELEFONĄ</button>
       <div class="offline-status" id="offlineStatus">Ruošiama naudoti be interneto…</div>`;
     if(index) index.insertAdjacentElement('afterend',tools); else document.body.insertBefore(tools,document.body.firstChild);
@@ -89,8 +88,6 @@
     const next=document.createElement('button'); next.type='button'; next.className='next-fab'; next.id='nextUnvisited'; next.textContent='KITA VIETA';
     document.body.appendChild(next);
     next.addEventListener('click',()=>goNext(allSteps));
-    document.getElementById('undoVisited').addEventListener('click',()=>undo(allSteps));
-    document.getElementById('resetVisited').addEventListener('click',()=>resetAll(allSteps));
 
     window.addEventListener('beforeinstallprompt',(e)=>{
       e.preventDefault(); deferredInstallPrompt=e;
@@ -101,6 +98,13 @@
 
     update(allSteps,days);
     registerSW();
+    requestAnimationFrame(()=>setTimeout(()=>{
+      const firstUnvisited=allSteps.find(step=>!visited.has(step.dataset.visitId));
+      if(firstUnvisited){
+        firstUnvisited.scrollIntoView({behavior:'auto',block:'center'});
+        flash(firstUnvisited);
+      }
+    },180));
   }
 
   function toggleStep(step,idx){
@@ -152,7 +156,6 @@
       const el=day.querySelector('.day-progress'); if(el) el.innerHTML=`Dienos progresas: <b>${dd} / ${ds.length} aplankyta</b>`;
       const tab=document.querySelector(`.index a[href="#${day.id}"]`); if(tab){const base=tab.dataset.baseLabel||tab.textContent.replace(/\s·\s\d+\/\d+$/,'');tab.dataset.baseLabel=base;tab.textContent=`${base} · ${dd}/${ds.length}`;}
     });
-    const undoBtn=document.getElementById('undoVisited'); if(undoBtn) undoBtn.disabled=!history.length;
   }
 
   async function registerSW(){
