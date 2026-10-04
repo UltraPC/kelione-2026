@@ -23,3 +23,5 @@ Kitas etapas:
 4. Likusios dienos skaičiavimas, importas/atkūrimas, konkrečios kelionės offline būsenos patvirtinimas.
 
 Nesujungti su main prieš naršyklės patikrą. Pirminį turinį galima atkurti iš ankstesnio Git commit; localStorage originalas išlaikytas.
+
+Atnaujinimas: antro etapo metu naršyklės ir offline perėjimo bandymai atlikti; dabartinė patikros apimtis bei ribos aprašytos STAGE2.md.

@@ -1,6 +1,28 @@
 (async () => {
   'use strict';
   const root=document.getElementById('tripRoot');
+  // The v5 worker injects its old script into every HTML response. Do not run
+  // both generations against the same document during that transition.
+  if(document.querySelector('script[src$="app-v5.js"]')){
+    root.textContent='Paruošta nauja programos versija. Progresas telefone bus išsaugotas.';
+    const button=document.createElement('button');button.type='button';button.textContent='Įjungti naują versiją';root.append(button);
+    button.onclick=async()=>{
+      button.disabled=true;
+      try{
+        const registration=await navigator.serviceWorker.register('./sw.js',{scope:'./'});await registration.update();
+        let worker=registration.waiting||registration.installing;
+        if(!worker){location.reload();return}
+        if(worker.state!=='installed')await new Promise((resolve,reject)=>{
+          const timeout=setTimeout(()=>reject(new Error('timeout')),20000);
+          worker.addEventListener('statechange',()=>{if(worker.state==='installed'){clearTimeout(timeout);resolve()}else if(worker.state==='redundant'){clearTimeout(timeout);reject(new Error('install'))}});
+        });
+        navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload(),{once:true});
+        (registration.waiting||worker).postMessage({type:'ACTIVATE_UPDATE'});
+      }catch{button.disabled=false;button.textContent='Atnaujinti nepavyko – bandyti dar kartą'}
+    };
+    return;
+  }
+
   const allowed=['europe-2026','alanya-2026'];
   const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
   const url=new URL(location.href);
@@ -50,6 +72,7 @@
         const href=URL.createObjectURL(blob),a=document.createElement('a');a.href=href;a.download='keliones-atsargine-kopija.json';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000);
       }catch{alert('Atsarginės kopijos paruošti nepavyko. Duomenys nepakeisti.')}
     };
+    window.TripPlanner?.prepare(window.TRIP_CONFIG);
     const script=document.createElement('script');script.src='./app-v6.js';script.onerror=()=>{root.prepend(Object.assign(document.createElement('p'),{textContent:'Nepavyko įkelti programos. Pabandykite atnaujinti puslapį.'}))};document.body.append(script);
   }catch(error){root.textContent=error.message+'. Patikrinkite ryšį ir atnaujinkite puslapį.'}
 })();

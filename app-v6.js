@@ -6,12 +6,27 @@
   const GEO_KEY='kelione2026.geo.v2';
   const DIST_KEY=`kelione2026.${config.id}.road.v${config.version}`;
   const GEO_DELAY=1150;
+  const SKIP_KEY=`kelione2026.${config.id}.skipped.v1`;
+  let skipped=new Set();try{skipped=new Set(JSON.parse(localStorage.getItem(SKIP_KEY)||'[]'))}catch{}
+  const pending=s=>!visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId);
   let visited=new Set(), lastTouched=-1, activeDay=null, scrollTick=false;
   let deferredInstallPrompt=null, tripMap=null, mapLayerGroup=null, gpsMarker=null;
   let mapFilter='all', geocoding=false, geocodeDone=0, geocodeTotal=0;
   const safeParse=(v,f)=>{try{return JSON.parse(v)}catch(e){return f}};
   const loadVisited=()=>{try{visited=new Set(safeParse(localStorage.getItem(STORAGE_KEY),config.migrated||[])||config.migrated||[])}catch(e){visited=new Set(config.migrated||[])}};
-  const saveVisited=()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify([...visited]));return true}catch(e){toast('Nepavyko išsaugoti progreso telefone',5000);return false}};
+  function commitStatus(nextVisited,nextSkipped){
+    let oldVisited,oldSkipped;
+    try{
+      oldVisited=localStorage.getItem(STORAGE_KEY);oldSkipped=localStorage.getItem(SKIP_KEY);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify([...nextVisited]));
+      localStorage.setItem(SKIP_KEY,JSON.stringify([...nextSkipped]));
+    }catch{
+      try{if(oldVisited===null)localStorage.removeItem(STORAGE_KEY);else if(oldVisited!==undefined)localStorage.setItem(STORAGE_KEY,oldVisited);
+        if(oldSkipped===null)localStorage.removeItem(SKIP_KEY);else if(oldSkipped!==undefined)localStorage.setItem(SKIP_KEY,oldSkipped)}catch{}
+      toast('Nepavyko išsaugoti progreso. Pakeitimas neatliktas.',5000);return false;
+    }
+    visited=nextVisited;skipped=nextSkipped;return true;
+  }
   const getGeo=()=>{try{return safeParse(localStorage.getItem(GEO_KEY),{})||{}}catch(e){return {}}};
   const saveGeo=g=>{try{localStorage.setItem(GEO_KEY,JSON.stringify(g))}catch(e){}};
   const getRoad=()=>{try{return safeParse(localStorage.getItem(DIST_KEY),null)}catch(e){return null}};
@@ -46,7 +61,7 @@
     if(nav){
       nav.dataset.nav='1';
       try{mode=new URL(nav.href).searchParams.get('travelmode')||'driving'}catch(e){}
-      nav.textContent=mode==='walking'?'🚶 EITI':'🚗 VAŽIUOTI';
+      nav.textContent=mode==='walking'?'EITI':'VAŽIUOTI';
       nav.classList.toggle('walk',mode==='walking');
       if(!step.querySelector('.step-actions')){
         const actions=document.createElement('div');actions.className='step-actions';
@@ -80,6 +95,12 @@
         b.addEventListener('click',()=>toggleStep(step,allSteps.indexOf(step),allSteps,days));
         const actions=step.querySelector('.step-actions')||(()=>{const d=document.createElement('div');d.className='step-actions';step.appendChild(d);return d})();
         actions.appendChild(b);
+        const skip=document.createElement('button');skip.type='button';skip.className='skip-btn';
+        skip.onclick=()=>{const id=step.dataset.visitId,nextSkipped=new Set(skipped),nextVisited=new Set(visited);
+          if(nextSkipped.has(id))nextSkipped.delete(id);else{nextSkipped.add(id);nextVisited.delete(id)}
+          if(!commitStatus(nextVisited,nextSkipped))return;
+          update(allSteps,days);if(tripMap)renderMap(allSteps,days);
+        };actions.append(skip);
       });
     });
 
@@ -100,7 +121,7 @@
     const toastEl=document.createElement('div'); toastEl.className='offline-toast'; toastEl.id='offlineToast'; document.body.appendChild(toastEl);
     const dock=document.createElement('div'); dock.className='fab-dock';
     const next=document.createElement('button'); next.type='button'; next.className='next-fab'; next.id='nextUnvisited'; next.textContent='KITA VIETA';
-    const map=document.createElement('button'); map.type='button'; map.className='map-fab'; map.id='tripMapBtn'; map.textContent='🗺️'; map.title='Visos kelionės progreso žemėlapis'; map.setAttribute('aria-label','Visos kelionės progreso žemėlapis');
+    const map=document.createElement('button'); map.type='button'; map.className='map-fab'; map.id='tripMapBtn'; map.textContent='ŽEMĖLAPIS'; map.title='Visos kelionės progreso žemėlapis'; map.setAttribute('aria-label','Visos kelionės progreso žemėlapis');
     dock.append(next,map); document.body.appendChild(dock);
     next.addEventListener('click',()=>goNext(allSteps));
     map.addEventListener('click',()=>openTripMap(days,allSteps));
@@ -109,14 +130,17 @@
     setupMenu(days,allSteps);
     setupInstall();
     setupScrollSpy(days,index,active);
+    window.addEventListener('trip-day-changed',e=>{const d=days.find(x=>x.id===e.detail);if(d)setActiveDay(d,days,index)});
+    window.addEventListener('trip-plan-changed',()=>{allSteps.splice(0,allSteps.length,...document.querySelectorAll('.step'));update(allSteps,days);if(tripMap)renderMap(allSteps,days,true)});
+    const selected=days.find(d=>d.id===window.TripPlanner?.activeDay());if(selected)setActiveDay(selected,days,index);
     update(allSteps,days);
     registerSW();
     setTimeout(()=>backgroundGeocode(allSteps),1800);
 
     requestAnimationFrame(()=>setTimeout(()=>{
-      const firstUnvisited=allSteps.find(s=>!visited.has(s.dataset.visitId));
-      const target=firstUnvisited||allSteps[0];
-      if(target){target.scrollIntoView({behavior:'auto',block:'center'});flash(target);const d=target.closest('.day');if(d)setActiveDay(d,days,index)}
+      const firstUnvisited=allSteps.find(s=>!s.closest('.day').hidden&&pending(s));
+      const target=firstUnvisited||activeDay?.querySelector('.step');
+      if(target&&document.body.dataset.mode!=='plan'){target.scrollIntoView({behavior:'auto',block:'center'});flash(target);const d=target.closest('.day');if(d)setActiveDay(d,days,index)}
     },180));
   }
 
@@ -126,7 +150,9 @@
     document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==btn)menu.classList.remove('open')});
     document.getElementById('offlineInfo').onclick=()=>toast(navigator.onLine?'Online · planą be ryšio naudokite po sėkmingo atnaujinimo':'Be interneto · žemėlapis ir navigacija gali neveikti',3200);
     document.getElementById('refreshOffline').onclick=async()=>{menu.classList.remove('open');try{const r=await navigator.serviceWorker?.getRegistration();await r?.update();toast('Offline kopija patikrinta / atnaujinama')}catch(e){toast('Atnaujinti nepavyko')}};
-    document.getElementById('resetProgress').onclick=()=>{if(confirm(`Atstatyti tik kelionės „${config.title}“ ${allSteps.length} stotelių progresą?`)){visited.clear();saveVisited();lastTouched=-1;update(allSteps,days);toast('Progresas atstatytas')}};
+    document.getElementById('resetProgress').onclick=()=>{if(confirm(`Atstatyti tik kelionės „${config.title}“ ${allSteps.length} stotelių progresą?`)){
+      if(!commitStatus(new Set(),new Set()))return;lastTouched=-1;update(allSteps,days);toast('Progresas atstatytas');
+    }};
   }
 
   function setupInstall(){
@@ -141,13 +167,16 @@
   }
 
   function toggleStep(step,idx,allSteps,days){
-    const id=step.dataset.visitId;if(visited.has(id))visited.delete(id);else visited.add(id);
-    lastTouched=idx;saveVisited();requestPersistentStorage();update(allSteps,days);if(tripMap)renderMap(allSteps,days);
+    const id=step.dataset.visitId,nextVisited=new Set(visited),nextSkipped=new Set(skipped);
+    if(nextSkipped.has(id)){nextSkipped.delete(id);nextVisited.add(id)}else if(nextVisited.has(id))nextVisited.delete(id);else nextVisited.add(id);
+    if(!commitStatus(nextVisited,nextSkipped))return;
+    lastTouched=idx;requestPersistentStorage();update(allSteps,days);if(tripMap)renderMap(allSteps,days);
   }
+
   function goNext(allSteps){
     const steps=activeDay?[...activeDay.querySelectorAll('.step')]:allSteps;
-    const target=steps.find(s=>!visited.has(s.dataset.visitId));
-    if(!target){toast('Šios dienos vietos aplankytos. Pasirinkite kitą dieną.');return}
+    const target=steps.find(pending);
+    if(!target){toast('Šioje dienoje nebeliko neaplankytų vietų. Pasirinkite kitą dieną.');return}
     target.scrollIntoView({behavior:'smooth',block:'center'});flash(target);
   }
   function flash(s){s.classList.add('focus-step');setTimeout(()=>s.classList.remove('focus-step'),1400)}
@@ -155,8 +184,8 @@
   function setupScrollSpy(days,index,activeBar){
     const syncHeight=()=>{if(index){document.documentElement.style.setProperty('--index-h',index.offsetHeight+'px');document.documentElement.style.setProperty('--active-h',activeBar.offsetHeight+'px')}};
     syncHeight();window.addEventListener('resize',syncHeight,{passive:true});
-    const detect=()=>{scrollTick=false;const marker=(index?.offsetHeight||0)+(activeBar?.offsetHeight||0)+8;let current=days[0]||null,best=Infinity;
-      days.forEach(day=>{const r=day.getBoundingClientRect();if(r.top<=marker&&r.bottom>marker){current=day;best=-1}else if(best>=0){const d=Math.abs(r.top-marker);if(d<best){best=d;current=day}}});
+    const detect=()=>{scrollTick=false;const marker=(index?.offsetHeight||0)+(activeBar?.offsetHeight||0)+8;let current=days.find(d=>!d.hidden)||null,best=Infinity;
+      days.filter(d=>!d.hidden).forEach(day=>{const r=day.getBoundingClientRect();if(r.top<=marker&&r.bottom>marker){current=day;best=-1}else if(best>=0){const d=Math.abs(r.top-marker);if(d<best){best=d;current=day}}});
       if(current)setActiveDay(current,days,index)};
     window.addEventListener('scroll',()=>{if(!scrollTick){scrollTick=true;requestAnimationFrame(detect)}},{passive:true});detect();
   }
@@ -167,16 +196,17 @@
     if(changed&&index){const tab=document.querySelector(`.index a[href="#${day.id}"]`);if(tab){const left=tab.offsetLeft-index.clientWidth/2+tab.offsetWidth/2;index.scrollTo({left:Math.max(0,left),behavior:'smooth'})}}
   }
   function updateActiveDayBar(day){
-    if(!day)return;const ds=[...day.querySelectorAll('.step')],done=ds.filter(s=>visited.has(s.dataset.visitId)).length,total=ds.length;
-    const all=[...document.querySelectorAll('.step')],allDone=all.filter(s=>visited.has(s.dataset.visitId)).length,pctAll=all.length?Math.round(allDone*100/all.length):0;
-    const s=document.getElementById('activeDaySummary');if(s)s.innerHTML=`<span class="day-name">${day.querySelector('h2')?.textContent?.trim()||'Diena'} · ${done}/${total}</span><span class="overall"> &nbsp;|&nbsp; Visa ${allDone}/${all.length} · </span><span class="pct">${pctAll}%</span>`;
-    const f=document.getElementById('activeDayFill');if(f)f.style.width=pctAll+'%';
+    if(!day)return;const ds=[...day.querySelectorAll('.step')];
+    const done=ds.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;
+    const skip=ds.filter(s=>skipped.has(s.dataset.visitId)).length;
+    const summary=document.getElementById('activeDaySummary');if(summary)summary.textContent=`${day.querySelector('h2').textContent}\n${done} aplankyta · ${skip} praleista · ${ds.length-done-skip} liko`;
+    const fill=document.getElementById('activeDayFill');if(fill)fill.style.width=ds.length?`${(done+skip)*100/ds.length}%`:'0%';
   }
   function update(allSteps,days){
-    allSteps.forEach(step=>{const yes=visited.has(step.dataset.visitId);step.classList.toggle('visited',yes);const b=step.querySelector('.visit-btn');if(b){b.textContent=yes?'✓ APLANKYTA':'○ APLANKYTA';b.setAttribute('aria-pressed',yes?'true':'false')}});
-    const done=allSteps.filter(s=>visited.has(s.dataset.visitId)).length,total=allSteps.length;
-    const fab=document.getElementById('nextUnvisited');if(fab)fab.textContent=done===total?'✓ VISKAS':`KITA VIETA · ${done}/${total}`;
-    days.forEach(day=>{const ds=[...day.querySelectorAll('.step')],dd=ds.filter(s=>visited.has(s.dataset.visitId)).length;const tab=document.querySelector(`.index a[href="#${day.id}"]`);
+    allSteps.forEach(step=>{const isSkipped=skipped.has(step.dataset.visitId);step.classList.toggle('skipped',isSkipped);const skip=step.querySelector('.skip-btn');if(skip){skip.textContent=isSkipped?'GRĄŽINTI Į PLANĄ':'PRALEISTI';skip.setAttribute('aria-pressed',String(isSkipped))}const yes=visited.has(step.dataset.visitId)&&!isSkipped;step.classList.toggle('visited',yes);const b=step.querySelector('.visit-btn');if(b){b.textContent=yes?'✓ APLANKYTA':'○ APLANKYTA';b.setAttribute('aria-pressed',yes?'true':'false')}});
+    const done=allSteps.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length,total=allSteps.length;
+    const fab=document.getElementById('nextUnvisited');if(fab)fab.textContent='KITA VIETA';
+    days.forEach(day=>{const ds=[...day.querySelectorAll('.step')],dd=ds.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;const tab=document.querySelector(`.index a[href="#${day.id}"]`);
       if(tab){const base=tab.dataset.baseLabel||tab.textContent.replace(/^✓\s*/,'').replace(/\s·\s\d+\/\d+$/,'');tab.dataset.baseLabel=base;tab.textContent=`${dd===ds.length&&ds.length?'✓ ':''}${base} · ${dd}/${ds.length}`;tab.classList.toggle('complete',dd===ds.length&&ds.length>0);tab.classList.toggle('partial',dd>0&&dd<ds.length)}});
     if(activeDay)updateActiveDayBar(activeDay);
   }
@@ -212,12 +242,12 @@
   }
   function routeSteps(allSteps,days){
     if(mapFilter==='day'){const day=activeDay||days[0];return [...day.querySelectorAll('.step')]}
-    if(mapFilter==='remaining'){const rem=allSteps.filter(s=>!visited.has(s.dataset.visitId));const last=[...allSteps].reverse().find(s=>visited.has(s.dataset.visitId));return last?[last,...rem]:rem}
+    if(mapFilter==='remaining'){const rem=allSteps.filter(pending);const last=[...allSteps].reverse().find(s=>visited.has(s.dataset.visitId));return last?[last,...rem]:rem}
     return allSteps;
   }
   function renderMap(allSteps,days,fit=false){
     if(!tripMap||!mapLayerGroup)return;mapLayerGroup.clearLayers();
-    const geo=getGeo(), steps=routeSteps(allSteps,days), latlngs=[], firstTodo=allSteps.find(s=>!visited.has(s.dataset.visitId));
+    const geo=getGeo(), steps=routeSteps(allSteps,days), latlngs=[], firstTodo=allSteps.find(pending);
     let prev=null, number=0;
     const startGeo=geo[config.start];
     const includeStart=(mapFilter==='all')||(mapFilter==='day'&&(activeDay?.id===config.days[0].id))||(mapFilter==='remaining'&&!allSteps.some(s=>visited.has(s.dataset.visitId)));
@@ -227,10 +257,10 @@
     }
     steps.forEach(step=>{
       const c=geo[step.dataset.destination];if(!c)return;const ll=[c.lat,c.lon];latlngs.push(ll);number++;
-      const done=visited.has(step.dataset.visitId), isNext=firstTodo===step, mode=step.dataset.mode||'driving';
+      const done=visited.has(step.dataset.visitId)&&!skipped.has(step.dataset.visitId), isNext=firstTodo===step, mode=step.dataset.mode||'driving';
       const cls=(isNext?'next':done?'done':'todo')+(mode==='walking'?' walk':'');
       const title=step.querySelector('.title')?.textContent?.trim()||'Stotelė';
-      const m=L.marker(ll,{icon:markerIcon(cls,number)}).bindPopup(`<b>${escapeHtml(title)}</b><br>${done?'✓ Aplankyta':'Liko aplankyti'} · ${mode==='walking'?'pėsčiomis':'automobiliu'}`);m.addTo(mapLayerGroup);
+      const m=L.marker(ll,{icon:markerIcon(cls,number)}).bindPopup(`<b>${escapeHtml(title)}</b><br>${skipped.has(step.dataset.visitId)?'Praleista':done?'✓ Aplankyta':'Liko aplankyti'} · ${mode==='walking'?'pėsčiomis':'automobiliu'}`);m.addTo(mapLayerGroup);
       if(prev){const color=done?'#16a34a':'#1769aa';const dash=mode==='walking'?'6 7':null;L.polyline([prev,ll],{color,weight:4,opacity:.85,dashArray:dash}).addTo(mapLayerGroup)}
       prev=ll;
     });
@@ -251,15 +281,16 @@
   }
   function fmtMin(m){const h=Math.floor(m/60),mm=m%60;return h?`${h} val. ${mm?mm+' min.':''}`:`${mm} min.`}
   function updateMapStats(allSteps){
-    const done=allSteps.filter(s=>visited.has(s.dataset.visitId)).length;
-    const drive=allSteps.filter(s=>s.dataset.mode==='driving'),driveDone=drive.filter(s=>visited.has(s.dataset.visitId)).length;
-    const t=plannedDrivingMinutes(allSteps), road=getRoad(), el=document.getElementById('mapStats');if(!el)return;
+    const done=allSteps.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;
+    const drive=allSteps.filter(s=>s.dataset.mode==='driving'),driveDone=drive.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;
+    const changed=skipped.size>0||!!document.querySelector('.step[data-custom]')||document.body.dataset.planChanged==='true';
+    const t=plannedDrivingMinutes(allSteps), road=changed?null:getRoad(), el=document.getElementById('mapStats');if(!el)return;
     let kmDone=0,kmLeft=null;
     if(road?.perStep){drive.forEach(s=>{if(visited.has(s.dataset.visitId))kmDone+=road.perStep[s.dataset.visitId]||0});kmLeft=drive.filter(s=>!visited.has(s.dataset.visitId)).reduce((sum,s)=>sum+(road.perStep[s.dataset.visitId]||0),0)}
-    const kmDoneText=road?`${Math.round(kmDone)} km`:'skaičiuojama…',kmLeftText=road?`${Math.round(kmLeft)} km`:'skaičiuojama…';
+    const kmDoneText=changed?'Neperskaičiuota':road?`${Math.round(kmDone)} km`:'skaičiuojama…',kmLeftText=changed?'Neperskaičiuota':road?`${Math.round(kmLeft)} km`:'skaičiuojama…';
     el.innerHTML=`<div>Aplankyta<br><b>${done}/${allSteps.length}</b></div><div>Automobilio etapai<br><b>${driveDone}/${drive.length}</b></div>
       <div>Nuvažiuota pagal planą<br><b>${kmDoneText}</b></div><div>Liko važiuoti<br><b>${kmLeftText}</b></div>
-      <div>Planinio vairavimo įveikta<br><b>${fmtMin(t.done)}</b></div><div>Planinio vairavimo liko<br><b>${fmtMin(t.left)}</b></div>
+      <div>Planinio vairavimo įveikta<br><b>${changed?'Neperskaičiuota':fmtMin(t.done)}</b></div><div>Planinio vairavimo liko<br><b>${changed?'Neperskaičiuota':fmtMin(t.left)}</b></div>
       <div class="map-legend">Žalia – aplankyta, mėlyna – liko, oranžinė – kita vieta, violetinis kontūras / punktyras – pėsčiomis. Kilometrai yra orientaciniai, skaičiuojami vieną kartą pagal OpenStreetMap/OSRM ir išsaugomi telefone. Linijos jungia suplanuotas stoteles ir nėra tiksli kelio geometrija; konkrečiai navigacijai naudokite „VAŽIUOTI / EITI“.</div>`;
   }
 
@@ -269,7 +300,9 @@
   }
 
   async function backgroundGeocode(allSteps){
-    if(geocoding)return;const unique=[...new Set([config.start,...allSteps.map(s=>s.dataset.destination).filter(Boolean)])],geo=getGeo(),missing=unique.filter(a=>!geo[a]);
+    if(geocoding)return;const unique=[...new Set([config.start,...allSteps.map(s=>s.dataset.destination).filter(Boolean)])],geo=getGeo();
+    for(const address of unique){const pair=address.match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);if(pair&&Math.abs(+pair[1])<=90&&Math.abs(+pair[2])<=180)geo[address]={lat:+pair[1],lon:+pair[2]}}
+    saveGeo(geo);const missing=unique.filter(a=>!geo[a]);
     geocodeTotal=unique.length;geocodeDone=unique.length-missing.length;if(!missing.length){await ensureRoadDistances(allSteps);if(tripMap)renderMap(allSteps,[...document.querySelectorAll('.day')]);return}
     geocoding=true;
     for(const address of missing){
@@ -283,6 +316,7 @@
   }
 
   async function ensureRoadDistances(allSteps){
+    if(document.body.dataset.planChanged==='true')return;
     if(getRoad())return;
     const geo=getGeo(), driving=allSteps.filter(s=>s.dataset.mode==='driving');
     const start=geo[config.start]; if(!start||driving.some(s=>!geo[s.dataset.destination]))return;
