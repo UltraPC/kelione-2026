@@ -1,7 +1,7 @@
 {
   "name": "Kelionės navigacija 2026",
   "short_name": "Kelionė 2026",
-  "description": "Rugsėjo 8–16 d. kelionės maršrutai, stotelės ir Google Maps navigacija.",
+  "description": "Kelionių dienos, lankytinos vietos, progresas ir Google Maps navigacija.",
   "lang": "lt",
   "start_url": "./",
   "scope": "./",

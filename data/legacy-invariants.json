@@ -1,0 +1,522 @@
+[
+  {
+    "id": "d1-s1",
+    "title": "1. Mummelsee",
+    "meta": "Planuojamas atvykimas: 10:40 · Išvykti iki: 11:15",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Schwarzwaldhochstrasse%2011%2C%2077889%20Seebach%2C%20Germany&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d1-s2",
+    "title": "2. Colmar – Parking Rapp",
+    "meta": "Planuojamas atvykimas: 12:30 · Išvykti iki: 14:40",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parking%20Rapp%2C%20Boulevard%20du%20Champ%20de%20Mars%2C%2068000%20Colmar%2C%20France&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d1-s3",
+    "title": "3. Chasseral – automobilio parkingas",
+    "meta": "Planuojamas atvykimas: 17:05 · Išvykti iki: 17:10",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Hotel%20Chasseral%2C%20Chasseral%20124%2C%202518%20Nods%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d1-s4",
+    "title": "4. Chasseral viršūnės panorama",
+    "meta": "Planuojamas atvykimas: 17:20 · Išvykti iki: 17:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Chasseral%20Summit%2C%20Switzerland&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d1-s5",
+    "title": "5. Grįžti prie Hotel Chasseral",
+    "meta": "Planuojamas atvykimas: 17:45 · Išvykti iki: 17:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Hotel%20Chasseral%2C%20Chasseral%20124%2C%202518%20Nods%2C%20Switzerland&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d1-s6",
+    "title": "6. Chez Ninfa – nakvynė",
+    "meta": "Planuojamas atvykimas: 18:20 · Išvykti kitą dieną 09:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=21%20Rue%20de%20la%20Vignette%2C%202613%20Villeret%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s1",
+    "title": "1. Lauterbrunnen",
+    "meta": "Planuojamas atvykimas: 11:00 · Išvykti iki: 11:40",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Bahnhof%20Lauterbrunnen%2C%203822%20Lauterbrunnen%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s2",
+    "title": "2. Stechelberg",
+    "meta": "Planuojamas atvykimas: 11:55 · Išvykti iki: 12:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Schilthornbahn%2C%20Stechelberg%2C%203824%20Lauterbrunnen%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s3",
+    "title": "3. Iseltwald",
+    "meta": "Planuojamas atvykimas: 12:55 · Išvykti iki: 13:25",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Dorfplatz%2C%203807%20Iseltwald%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s4",
+    "title": "4. Giessbach Falls",
+    "meta": "Planuojamas atvykimas: 13:50 · Išvykti iki: 14:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Grandhotel%20Giessbach%2C%203855%20Brienz%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s5",
+    "title": "5. Susten Pass",
+    "meta": "Planuojamas atvykimas: 16:10 · Išvykti iki: 16:45",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Susten%20Pass%2C%203863%20Gadmen%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s6",
+    "title": "6. Schillerbalkon panorama",
+    "meta": "Planuojamas atvykimas: 18:20 · Išvykti iki: 18:40",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Schillerbalkon%2C%20Dorfstrasse%2C%206377%20Seelisberg%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d2-s7",
+    "title": "7. Löwen Lodge – nakvynė",
+    "meta": "Planuojamas atvykimas: 18:50 · Išvykti kitą dieną 09:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Dorfstrasse%2073%2C%206377%20Seelisberg%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d3-s1",
+    "title": "1. Furka Pass",
+    "meta": "Planuojamas atvykimas: 10:20 · Išvykti iki: 10:45",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Furka%20Pass%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d3-s2",
+    "title": "2. Rhône Glacier / Belvédère",
+    "meta": "Planuojamas atvykimas: 10:55 · Išvykti iki: 11:25",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Rh%C3%B4ne%20Glacier%2C%20Furka%20Pass%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d3-s3",
+    "title": "3. Grimsel Pass / Totensee",
+    "meta": "Planuojamas atvykimas: 11:55 · Išvykti iki: 12:25",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Grimsel%20Pass%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d3-s4",
+    "title": "4. Nufenen Pass",
+    "meta": "Planuojamas atvykimas: 13:25 · Išvykti iki: 13:55",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Nufenen%20Pass%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d3-s5",
+    "title": "5. Via Adda 991 – nakvynė",
+    "meta": "Planuojamas atvykimas: 17:30 · Išvykti kitą dieną 08:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Adda%20991%2C%2023018%20Talamona%20SO%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s1",
+    "title": "1. Punta Bianca – automobilio parkingas",
+    "meta": "Planuojamas atvykimas: 11:15 · Išvykti iki: 11:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Monastero%20di%20Santa%20Croce%2C%20Via%20Santa%20Croce%2030%2C%2019031%20Ameglia%20SP%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s2",
+    "title": "2. Punta Bianca",
+    "meta": "Planuojamas atvykimas: 11:45 · Išvykti iki: 12:15",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Punta%20Bianca%2C%20Ameglia%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s3",
+    "title": "3. Grįžti prie Monastero di Santa Croce",
+    "meta": "Planuojamas atvykimas: 12:45 · Išvykti iki: 12:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Monastero%20di%20Santa%20Croce%2C%20Via%20Santa%20Croce%2030%2C%2019031%20Ameglia%20SP%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s4",
+    "title": "4. Cava Museo Fantiscritti",
+    "meta": "Planuojamas atvykimas: 13:20 · Išvykti iki: 14:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Miseglia%20Fantiscritti%2084%2C%2054033%20Carrara%20MS%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s5",
+    "title": "5. Lucca – Parcheggio Carducci",
+    "meta": "Planuojamas atvykimas: 15:20 · Išvykti iki: 15:25",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Carducci%2C%20Viale%20Giosu%C3%A8%20Carducci%2C%2055100%20Lucca%20LU%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s6",
+    "title": "6. Lucca – Piazza dell’Anfiteatro",
+    "meta": "Planuojamas atvykimas: 15:40 · Išvykti iki: 17:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Piazza%20dell%E2%80%99Anfiteatro%2C%2055100%20Lucca%20LU%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s7",
+    "title": "7. Grįžti į Parcheggio Carducci",
+    "meta": "Planuojamas atvykimas: 17:25 · Išvykti iki: 17:35",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Carducci%2C%20Viale%20Giosu%C3%A8%20Carducci%2C%2055100%20Lucca%20LU%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d4-s8",
+    "title": "8. San Salvatore – nakvynė",
+    "meta": "Planuojamas atvykimas: 19:15 · Išvykti kitą dieną 08:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Brigata%20Berto%2028A%2C%2016030%20San%20Salvatore%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s1",
+    "title": "1. Boccadasse - parkingas už ZTL",
+    "meta": "Planuojamas atvykimas: 09:05 · Išvykti iki: 09:10",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Giordano%20Bruno%202%2C%2016146%20Genova%20GE%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s2",
+    "title": "2. Boccadasse",
+    "meta": "Planuojamas atvykimas: 09:15 · Išvykti iki: 09:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Boccadasse%2C%2016146%20Genova%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s3",
+    "title": "3. Grįžti į Boccadasse parkingą",
+    "meta": "Planuojamas atvykimas: 10:00 · Išvykti iki: 10:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Giordano%20Bruno%202%2C%2016146%20Genova%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s4",
+    "title": "4. Porto Antico - parkingas",
+    "meta": "Planuojamas atvykimas: 10:25 · Išvykti iki: 10:35",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Calata%20Gadda%2C%2016128%20Genova%20GE%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s5",
+    "title": "5. Centro Storico + San Lorenzo",
+    "meta": "Planuojamas atvykimas: 11:15 · Išvykti iki: 13:45",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Cattedrale%20di%20San%20Lorenzo%2C%20Piazza%20San%20Lorenzo%2C%2016123%20Genova%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s6",
+    "title": "6. Via Garibaldi / Palazzi dei Rolli",
+    "meta": "Planuojamas atvykimas: 14:00 · Išvykti iki: 15:15",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Garibaldi%2C%2016124%20Genova%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s7",
+    "title": "7. Spianata Castelletto",
+    "meta": "Planuojamas atvykimas: 15:30 · Išvykti iki: 16:15",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Belvedere%20Luigi%20Montaldo%2C%2016124%20Genova%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s8",
+    "title": "8. Grįžti į Porto Antico parkingą",
+    "meta": "Planuojamas atvykimas: 16:30 · Išvykti iki: 17:15",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Calata%20Gadda%2C%2016128%20Genova%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d5-s9",
+    "title": "9. Grįžti į San Salvatore",
+    "meta": "Planuojamas atvykimas: 18:30 · Išvykti kitą dieną 08:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Brigata%20Berto%2028A%2C%2016030%20San%20Salvatore%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s1",
+    "title": "1. Portofino - oficialus parkingas",
+    "meta": "Planuojamas atvykimas: 09:00 · Išvykti iki: 09:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20coperto%20Portofino%2C%20Piazza%20Martiri%20della%20Libert%C3%A0%2C%2016034%20Portofino%20GE%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s2",
+    "title": "2. Portofino centras",
+    "meta": "Planuojamas atvykimas: 09:05 · Išvykti iki: 09:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Piazzetta%20di%20Portofino%2C%2016034%20Portofino%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s3",
+    "title": "3. Grįžti į Portofino parkingą",
+    "meta": "Planuojamas atvykimas: 10:00 · Išvykti iki: 10:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20coperto%20Portofino%2C%20Piazza%20Martiri%20della%20Libert%C3%A0%2C%2016034%20Portofino%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s4",
+    "title": "4. Sestri Levante - Piazza Aldo Moro parkingas",
+    "meta": "Planuojamas atvykimas: 10:45 · Išvykti iki: 10:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Piazza%20Aldo%20Moro%2C%20Piazza%20Aldo%20Moro%2C%2016039%20Sestri%20Levante%20GE%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s5",
+    "title": "5. Baia del Silenzio",
+    "meta": "Planuojamas atvykimas: 11:00 · Išvykti iki: 12:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Baia%20del%20Silenzio%2C%2016039%20Sestri%20Levante%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s6",
+    "title": "6. Grįžti į Sestri parkingą",
+    "meta": "Planuojamas atvykimas: 12:15 · Išvykti iki: 12:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Piazza%20Aldo%20Moro%2C%20Piazza%20Aldo%20Moro%2C%2016039%20Sestri%20Levante%20GE%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s7",
+    "title": "7. Passo del Bracco",
+    "meta": "Planuojamas atvykimas: 13:00 · Išvykti iki: 13:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Passo%20del%20Bracco%2C%20SS1%20Via%20Aurelia%2C%20Liguria%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s8",
+    "title": "8. Tellaro - parkingas prieš ZTL",
+    "meta": "Planuojamas atvykimas: 14:15 · Išvykti iki: 14:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Via%20Fiascherino%2C%20Localit%C3%A0%20Fiascherino%20132%2C%2019032%20Tellaro%20SP%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s9",
+    "title": "9. Tellaro centras",
+    "meta": "Planuojamas atvykimas: 14:25 · Išvykti iki: 15:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Tellaro%2C%2019032%20Lerici%20SP%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s10",
+    "title": "10. Grįžti į Tellaro parkingą",
+    "meta": "Planuojamas atvykimas: 15:30 · Išvykti iki: 15:40",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Via%20Fiascherino%2C%20Localit%C3%A0%20Fiascherino%20132%2C%2019032%20Tellaro%20SP%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d6-s11",
+    "title": "11. Marina di Pisa - nakvynė",
+    "meta": "Planuojamas atvykimas: 17:30 · Išvykti kitą dieną 09:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Barbolani%2067%2C%2056128%20Marina%20di%20Pisa%20PI%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s1",
+    "title": "1. Pisa – Parcheggio Via Pietrasantina",
+    "meta": "Planuojamas atvykimas: 09:20 · Išvykti iki: 09:25",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Via%20Pietrasantina%2C%2056122%20Pisa%20PI%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s2",
+    "title": "2. Piazza dei Miracoli",
+    "meta": "Planuojamas atvykimas: 09:30 · Išvykti iki: 11:45",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Piazza%20del%20Duomo%2C%2056126%20Pisa%20PI%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s3",
+    "title": "3. Piazza dei Cavalieri",
+    "meta": "Planuojamas atvykimas: 12:05 · Išvykti iki: 12:35",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Piazza%20dei%20Cavalieri%2C%2056126%20Pisa%20PI%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s4",
+    "title": "4. Borgo Stretto / Lungarni",
+    "meta": "Planuojamas atvykimas: 12:45 · Išvykti iki: 14:35",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Borgo%20Stretto%2C%20Pisa%20PI%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s5",
+    "title": "5. Santa Maria della Spina",
+    "meta": "Planuojamas atvykimas: 14:45 · Išvykti iki: 15:15",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Lungarno%20Gambacorti%2050%2C%2056125%20Pisa%20PI%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s6",
+    "title": "6. Orto Botanico",
+    "meta": "Planuojamas atvykimas: 15:30 · Išvykti iki: 17:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Luca%20Ghini%2013%2C%2056126%20Pisa%20PI%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s7",
+    "title": "7. Grįžti į Via Pietrasantina parkingą",
+    "meta": "Planuojamas atvykimas: 17:20 · Išvykti iki: 17:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Via%20Pietrasantina%2C%2056122%20Pisa%20PI%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d7-s8",
+    "title": "8. Grįžti į Marina di Pisa",
+    "meta": "Planuojamas atvykimas: 18:00 · Išvykti kitą dieną 08:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Via%20Barbolani%2067%2C%2056128%20Marina%20di%20Pisa%20PI%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s1",
+    "title": "1. Passo della Cisa",
+    "meta": "Planuojamas atvykimas: 10:40 · Išvykti iki: 11:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Passo%20della%20Cisa%2C%20SS62%2C%2043042%20Berceto%20PR%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s2",
+    "title": "2. Orta San Giulio – parkingas",
+    "meta": "Planuojamas atvykimas: 13:45 · Išvykti iki: 13:50",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Via%20Panoramica%2C%2028016%20Orta%20San%20Giulio%20NO%2C%20Italy&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s3",
+    "title": "3. Orta San Giulio – Piazza Motta",
+    "meta": "Planuojamas atvykimas: 14:00 · Išvykti iki: 15:05",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Piazza%20Motta%2C%2028016%20Orta%20San%20Giulio%20NO%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s4",
+    "title": "4. Grįžti į Orta parkingą",
+    "meta": "Planuojamas atvykimas: 15:15 · Išvykti iki: 15:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Parcheggio%20Via%20Panoramica%2C%2028016%20Orta%20San%20Giulio%20NO%2C%20Italy&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s5",
+    "title": "5. Isleten – Urnersee pakrantė",
+    "meta": "Planuojamas atvykimas: 18:05 · Išvykti iki: 18:20",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Isleten%2C%206461%20Isenthal%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s6",
+    "title": "6. Chäppeli panorama",
+    "meta": "Planuojamas atvykimas: 18:35 · Išvykti iki: 18:45",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Isenthal%2C%20Ch%C3%A4ppeli%2C%206461%20Isenthal%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d8-s7",
+    "title": "7. Hotel Urirotstock – nakvynė",
+    "meta": "Planuojamas atvykimas: 19:00 · Išvykti kitą dieną 08:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Hotel%20Urirotstock%2C%20Dorfstrasse%2027%2C%206461%20Isenthal%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d9-s1",
+    "title": "1. Tellsplatte – parkingas ir Urnersee panorama",
+    "meta": "Planuojamas atvykimas: 09:05 · Išvykti pėsčiomis iki: 09:10",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Tellsplatte%203%2C%206452%20Sisikon%2C%20Switzerland&travelmode=driving&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d9-s2",
+    "title": "2. Tellskapelle / Tellsplatte",
+    "meta": "Planuojamas atvykimas: 09:20 · Išvykti iki: 09:45",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Tellskapelle%2C%206452%20Sisikon%2C%20Switzerland&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d9-s3",
+    "title": "3. Grįžti į Tellsplatte parkingą",
+    "meta": "Planuojamas atvykimas: 09:55 · Išvažiuoti į Hanau iki: 10:00",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Tellsplatte%203%2C%206452%20Sisikon%2C%20Switzerland&travelmode=walking&dir_action=navigate"
+    ]
+  },
+  {
+    "id": "d9-s4",
+    "title": "4. Hanau – kelionės pabaiga",
+    "meta": "Planuojamas atvykimas: apie 15:30–16:30",
+    "links": [
+      "https://www.google.com/maps/dir/?api=1&destination=Hanau%2C%20Germany&travelmode=driving&dir_action=navigate"
+    ]
+  }
+]
