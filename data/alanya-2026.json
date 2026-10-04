@@ -1,0 +1,117 @@
+{
+  "id": "alanya-2026",
+  "title": "Alanija 2026",
+  "version": 1,
+  "start": "World Star Beach Resort Spa, Kestel, Alanya",
+  "days": [
+    {
+      "id": "a1",
+      "title": "1 diena · Syedra ir Sapadere",
+      "html": "<section class=\"day\" id=\"a1\"><h2>1 diena · Syedra ir Sapadere</h2><div class=\"sub\">Išvykimas 10:30 · grįžti iki 19:00 · Europe/Istanbul. Laikai orientaciniai, eismas neįvertintas.</div><div class=\"step\" data-stop-id=\"alanya-2026-a1-syedra\"><div class=\"step-grid\"><div><h3 class=\"title\">Syedra antikinis miestas</h3><div class=\"meta\">11:20–12:50</div><p class=\"desc\">Griuvėsiai ir jūros panorama. Planui skirta 90 min. Privažiavimą, darbo laiką ir kainą patikrinkite prieš vykdami.</p><div class=\"addr\">Syedra Antik Kenti, Alanya</div><a class=\"btn\" href=\"https://www.google.com/maps/dir/?api=1&amp;destination=Syedra+Antik+Kenti%2C+Alanya&amp;travelmode=driving&amp;dir_action=navigate\" target=\"_blank\" rel=\"noopener\">VAŽIUOTI</a></div></div></div><div class=\"step\" data-stop-id=\"alanya-2026-a1-sapadere\"><div class=\"step-grid\"><div><h3 class=\"title\">Sapadere kanjonas ir pietų pertrauka</h3><div class=\"meta\">14:05–16:15</div><p class=\"desc\">14:05–14:50 pietūs; 14:50–16:15 pasivaikščiojimas. Lankymo dienos prieinamumas ir kaina nepatvirtinti.</p><div class=\"addr\">Sapadere Kanyonu, Alanya</div><a class=\"btn\" href=\"https://www.google.com/maps/dir/?api=1&amp;destination=Sapadere+Kanyonu%2C+Alanya&amp;travelmode=driving&amp;dir_action=navigate\" target=\"_blank\" rel=\"noopener\">VAŽIUOTI</a></div></div></div><div class=\"step\" data-stop-id=\"alanya-2026-a1-hotel\"><div class=\"step-grid\"><div><h3 class=\"title\">Grįžimas į viešbutį</h3><div class=\"meta\">18:00–18:00</div><p class=\"desc\">Planinis grįžimas apie 18:00. Iki galutinio 19:00 termino palikta 60 min. atsarga.</p><div class=\"addr\">World Star Beach Resort Spa, Kestel, Alanya</div><a class=\"btn\" href=\"https://www.google.com/maps/dir/?api=1&amp;destination=World+Star+Beach+Resort+Spa%2C+Kestel%2C+Alanya&amp;travelmode=driving&amp;dir_action=navigate\" target=\"_blank\" rel=\"noopener\">VAŽIUOTI</a></div></div></div></section>",
+      "departure": "10:30",
+      "returnBy": "19:00",
+      "bufferMinutes": 60,
+      "stops": [
+        {
+          "id": "alanya-2026-a1-syedra",
+          "title": "Syedra antikinis miestas",
+          "destination": "Syedra Antik Kenti, Alanya",
+          "mode": "driving",
+          "visitMinutes": 90,
+          "terminal": false,
+          "originalMeta": "11:20–12:50"
+        },
+        {
+          "id": "alanya-2026-a1-sapadere",
+          "title": "Sapadere kanjonas ir pietų pertrauka",
+          "destination": "Sapadere Kanyonu, Alanya",
+          "mode": "driving",
+          "visitMinutes": 130,
+          "terminal": false,
+          "originalMeta": "14:05–16:15"
+        },
+        {
+          "id": "alanya-2026-a1-hotel",
+          "title": "Grįžimas į viešbutį",
+          "destination": "World Star Beach Resort Spa, Kestel, Alanya",
+          "mode": "driving",
+          "visitMinutes": 0,
+          "terminal": true,
+          "originalMeta": "18:00–18:00"
+        }
+      ],
+      "timing": {
+        "departure": "10:30",
+        "returnBy": "19:00",
+        "bufferMinutes": 60,
+        "breakMinutes": 0
+      },
+      "start": "World Star Beach Resort Spa, Kestel, Alanya",
+      "end": "World Star Beach Resort Spa, Kestel, Alanya",
+      "legs": {
+        "[\"driving\",\"World Star Beach Resort Spa, Kestel, Alanya\",\"Syedra Antik Kenti, Alanya\"]": {
+          "minutes": 50,
+          "source": "original-plan"
+        },
+        "[\"driving\",\"Syedra Antik Kenti, Alanya\",\"Sapadere Kanyonu, Alanya\"]": {
+          "minutes": 75,
+          "source": "original-plan"
+        },
+        "[\"driving\",\"Sapadere Kanyonu, Alanya\",\"World Star Beach Resort Spa, Kestel, Alanya\"]": {
+          "minutes": 105,
+          "source": "original-plan"
+        }
+      }
+    },
+    {
+      "id": "a2",
+      "title": "2 diena · Dim urvas",
+      "html": "<section class=\"day\" id=\"a2\"><h2>2 diena · Dim urvas</h2><div class=\"sub\">Išvykimas 10:30 · grįžti iki 19:00 · Europe/Istanbul. Laikai orientaciniai, eismas neįvertintas.</div><div class=\"step\" data-stop-id=\"alanya-2026-a2-dim\"><div class=\"step-grid\"><div><h3 class=\"title\">Dim urvas</h3><div class=\"meta\">11:10–12:30</div><p class=\"desc\">Urvas ir apylinkių apžvalga. Darbo laikas bei bilieto kaina šiame plane nepatvirtinti.</p><div class=\"addr\">Dim Mağarası, Alanya</div><a class=\"btn\" href=\"https://www.google.com/maps/dir/?api=1&amp;destination=Dim+Ma%C4%9Faras%C4%B1%2C+Alanya&amp;travelmode=driving&amp;dir_action=navigate\" target=\"_blank\" rel=\"noopener\">VAŽIUOTI</a></div></div></div><div class=\"step\" data-stop-id=\"alanya-2026-a2-hotel\"><div class=\"step-grid\"><div><h3 class=\"title\">Grįžimas į viešbutį</h3><div class=\"meta\">13:10–13:10</div><p class=\"desc\">Pagrindinis trumpas maršrutas. Dim upės pietų vietą pridėsime pasirinkę tikslų restoraną; bendras slėnio taškas į navigaciją neįtrauktas.</p><div class=\"addr\">World Star Beach Resort Spa, Kestel, Alanya</div><a class=\"btn\" href=\"https://www.google.com/maps/dir/?api=1&amp;destination=World+Star+Beach+Resort+Spa%2C+Kestel%2C+Alanya&amp;travelmode=driving&amp;dir_action=navigate\" target=\"_blank\" rel=\"noopener\">VAŽIUOTI</a></div></div></div></section>",
+      "departure": "10:30",
+      "returnBy": "19:00",
+      "bufferMinutes": 60,
+      "stops": [
+        {
+          "id": "alanya-2026-a2-dim",
+          "title": "Dim urvas",
+          "destination": "Dim Mağarası, Alanya",
+          "mode": "driving",
+          "visitMinutes": 80,
+          "terminal": false,
+          "originalMeta": "11:10–12:30"
+        },
+        {
+          "id": "alanya-2026-a2-hotel",
+          "title": "Grįžimas į viešbutį",
+          "destination": "World Star Beach Resort Spa, Kestel, Alanya",
+          "mode": "driving",
+          "visitMinutes": 0,
+          "terminal": true,
+          "originalMeta": "13:10–13:10"
+        }
+      ],
+      "timing": {
+        "departure": "10:30",
+        "returnBy": "19:00",
+        "bufferMinutes": 60,
+        "breakMinutes": 0
+      },
+      "start": "World Star Beach Resort Spa, Kestel, Alanya",
+      "end": "World Star Beach Resort Spa, Kestel, Alanya",
+      "legs": {
+        "[\"driving\",\"World Star Beach Resort Spa, Kestel, Alanya\",\"Dim Mağarası, Alanya\"]": {
+          "minutes": 40,
+          "source": "original-plan"
+        },
+        "[\"driving\",\"Dim Mağarası, Alanya\",\"World Star Beach Resort Spa, Kestel, Alanya\"]": {
+          "minutes": 40,
+          "source": "original-plan"
+        }
+      }
+    }
+  ],
+  "legacyIds": {},
+  "draft": true,
+  "schemaVersion": 2,
+  "timeZone": "Europe/Istanbul"
+}

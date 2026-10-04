@@ -1,0 +1,37 @@
+const assert=require('node:assert/strict');
+const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
+(async()=>{
+ const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
+ const root=path.resolve(__dirname,'..');
+ const server=http.createServer((req,res)=>{const relative=new URL(req.url,'http://localhost').pathname.replace(/^\/kelione-2026\//,'');const file=path.resolve(root,relative||'index.html');if(!file.startsWith(root+path.sep)){res.writeHead(403);res.end();return}fs.readFile(file,(err,data)=>{if(err){res.writeHead(404);res.end();return}const ext=path.extname(file);res.setHeader('Content-Type',({'.js':'application/javascript','.json':'application/json','.html':'text/html','.css':'text/css'})[ext]||'application/octet-stream');res.end(data)})});await new Promise(r=>server.listen(0,'127.0.0.1',r));server.unref();
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--disable-gpu']});
+ const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const base=process.env.TEST_URL||`http://127.0.0.1:${server.address().port}/kelione-2026/`;
+ await page.goto(base+'?trip=alanya-2026');await page.locator('.day:visible .visit-btn').first().waitFor();
+ await page.evaluate(()=>navigator.serviceWorker.ready);await page.reload();await page.locator('.day:visible .visit-btn').first().waitFor();
+ assert.match(await page.locator('.timing-panel [role=status]').first().textContent(),/18:00/);
+ await page.getByRole('button',{name:'Laiko nustatymai',exact:true}).click();
+ await page.getByLabel('Išvykimas',{exact:true}).fill('11:30');
+ await page.getByRole('button',{name:'Išsaugoti',exact:true}).click();
+ assert.match(await page.locator('.timing-panel [role=status]').first().textContent(),/19:00/);
+ assert.equal(await page.locator('.timing-panel').getAttribute('data-status'),'low-buffer');
+ const downloadPromise=page.waitForEvent('download');await page.locator('#exportBackup').click();const download=await downloadPromise;const backup=JSON.parse(fs.readFileSync(await download.path(),'utf8'));assert.equal(backup.version,2);
+ await page.locator('.day:visible .skip-btn').first().click();
+ assert.equal(await page.locator('.timing-panel').getAttribute('data-status'),'incomplete');
+ await page.locator('.timing-panel summary').click();
+ const inputs=page.locator('.timing-panel details input');for(let i=0;i<await inputs.count();i++){if(await inputs.nth(i).inputValue()===''){await inputs.nth(i).fill('45');await inputs.nth(i).dispatchEvent('change')}}
+ assert.notEqual(await page.locator('.timing-panel').getAttribute('data-status'),'incomplete');
+ await page.getByRole('button',{name:'Tęsti nuo čia',exact:true}).click();await page.getByLabel('Dabartinė vieta',{exact:true}).selectOption('alanya-2026-a1-sapadere');await page.getByRole('button',{name:'Išsaugoti',exact:true}).click();assert.match(await page.locator('.timing-panel h2').textContent(),/Likusi diena/);
+ await page.locator('.day:visible .visit-btn').first().click();assert.match(await page.locator('.timing-panel [role=status]').first().textContent(),/Iš naujo/);
+ await page.getByRole('button',{name:'Dienos planas',exact:true}).click();
+ await context.setOffline(true);await page.reload();await page.locator('.timing-panel').waitFor();
+ const before=await page.evaluate(()=>localStorage.getItem('kelione2026.alanya-2026.visited.v2'));
+ await page.locator('input[type=file]').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});await page.getByRole('heading',{name:'Importo peržiūra'}).waitFor();
+ assert.equal(await page.evaluate(()=>localStorage.getItem('kelione2026.alanya-2026.visited.v2')),before,'preview must not write');
+ await Promise.all([page.waitForEvent('load'),page.getByRole('button',{name:'Pakeisti pasirinktų kelionių duomenis'}).click()]);await page.locator('.timing-panel').waitFor();assert.match(await page.locator('.timing-panel [role=status]').first().textContent(),/19:00/);assert.equal(await page.locator('.visited').count(),0);
+ page.once('dialog',d=>d.accept());await Promise.all([page.waitForEvent('load'),page.getByRole('button',{name:'Atšaukti paskutinį importą'}).click()]);await page.locator('.timing-panel').waitFor();assert.equal(await page.evaluate(()=>localStorage.getItem('kelione2026.alanya-2026.visited.v2')),before);
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ if(process.env.SCREENSHOT_PATH)await page.screenshot({path:process.env.SCREENSHOT_PATH,fullPage:true});
+ assert.deepEqual(errors,[]);console.log('PASS stage3 Chromium mobile: timing edits, unknown segments, manual estimates, continue/reanchor, export, offline import preview/replacement/undo, no overflow or JS errors.');await browser.close();server.close();
+})().catch(e=>{console.error(e);process.exit(1)});
