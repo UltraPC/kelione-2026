@@ -8,6 +8,8 @@
   const GEO_DELAY=1150;
   const SKIP_KEY=`kelione2026.${config.id}.skipped.v1`;
   let skipped=new Set();try{skipped=new Set(JSON.parse(localStorage.getItem(SKIP_KEY)||'[]'))}catch{}
+  const terminalIds=new Set(config.days.flatMap(d=>(d.stops||[]).filter(s=>s.terminal).map(s=>s.id)));
+  for(const id of terminalIds)skipped.delete(id);
   const pending=s=>!visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId);
   let visited=new Set(), lastTouched=-1, activeDay=null, scrollTick=false;
   let deferredInstallPrompt=null, tripMap=null, mapLayerGroup=null, gpsMarker=null;
@@ -100,7 +102,7 @@
           if(nextSkipped.has(id))nextSkipped.delete(id);else{nextSkipped.add(id);nextVisited.delete(id)}
           if(!commitStatus(nextVisited,nextSkipped))return;
           update(allSteps,days);if(tripMap)renderMap(allSteps,days);
-        };actions.append(skip);
+        };if(!terminalIds.has(id))actions.append(skip);
       });
     });
 
@@ -209,6 +211,7 @@
     days.forEach(day=>{const ds=[...day.querySelectorAll('.step')],dd=ds.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;const tab=document.querySelector(`.index a[href="#${day.id}"]`);
       if(tab){const base=tab.dataset.baseLabel||tab.textContent.replace(/^✓\s*/,'').replace(/\s·\s\d+\/\d+$/,'');tab.dataset.baseLabel=base;tab.textContent=`${dd===ds.length&&ds.length?'✓ ':''}${base} · ${dd}/${ds.length}`;tab.classList.toggle('complete',dd===ds.length&&ds.length>0);tab.classList.toggle('partial',dd>0&&dd<ds.length)}});
     if(activeDay)updateActiveDayBar(activeDay);
+    window.dispatchEvent(new Event('trip-status-changed'));
   }
 
   function buildMapDialog(){

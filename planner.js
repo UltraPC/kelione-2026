@@ -21,7 +21,7 @@
   bar.append(travel,plan,daySelect);document.querySelector('.trip-picker').after(bar);
   const panel=el('section',undefined,'planning-panel');const add=el('button','+ Pridėti vietą');add.type='button';
   const wish=el('div');panel.append(add,el('h2','Norimos aplankyti vietos'),wish);bar.after(panel);panel.after(status);
-  const notice=el('p','Papildomos vietos pakeičia maršrutą. Ankstesni atvykimo laikai nebeperskaičiuoti; grįžimą patikrinkite navigacijoje.','trip-notice');notice.hidden=true;status.after(notice);
+  const notice=el('p','Grįžimo įvertį rasite dienos suvestinėje. Kortelėse pateikti pirminio plano atvykimo laikai.','trip-notice');notice.hidden=true;status.after(notice);
   const refreshNotice=()=>{const changed=state.items.some(x=>x.dayId)||Object.keys(state.order).length>0;notice.hidden=!changed;document.body.dataset.planChanged=String(changed)};
   const returnLink=el('a','Grįžti į dienos pabaigos vietą','return-link');bar.append(returnLink);
   function selectDay(){
@@ -46,12 +46,15 @@
    day.append(card(item));
   }
   for(const day of days){const order=state.order[day.id]||[];const steps=[...day.querySelectorAll('.step')];steps.sort((a,b)=>{const ai=order.indexOf(a.dataset.stopId),bi=order.indexOf(b.dataset.stopId);return (ai<0?1e6:ai)-(bi<0?1e6:bi)}).forEach(s=>day.append(s));}
+  const terminalIds=new Set(config.days.map(d=>d.stops?.find(s=>s.terminal)?.id).filter(Boolean));
+  for(const day of days){const last=[...day.querySelectorAll('.step')].find(s=>terminalIds.has(s.dataset.stopId));if(last)day.append(last)}
   function controls(){for(const day of days)for(const step of day.querySelectorAll('.step')){
+   if(terminalIds.has(step.dataset.stopId))continue;
    const actions=el('div',undefined,'planner-actions');
    for(const [label,delta] of [['↑ Aukštyn',-1],['↓ Žemyn',1]]){const b=el('button',label);b.type='button';b.onclick=()=>{
-    const nodes=[...day.querySelectorAll('.step')],i=nodes.indexOf(step),j=i+delta;if(j<0||j>=nodes.length)return;
+    const nodes=[...day.querySelectorAll('.step')],i=nodes.indexOf(step),j=i+delta;if(j<0||j>=nodes.length||terminalIds.has(nodes[j].dataset.stopId))return;
     [nodes[i],nodes[j]]=[nodes[j],nodes[i]];const next=clone(state);next.order[day.id]=nodes.map(x=>x.dataset.stopId);
-    if(save(next)){nodes.forEach(x=>day.append(x));refreshNotice();status.textContent='Stotelių seka išsaugota. Atvykimo laikus reikia perskaičiuoti.';window.dispatchEvent(new Event('trip-plan-changed'))}
+    if(save(next)){nodes.forEach(x=>day.append(x));refreshNotice();status.textContent='Stotelių seka išsaugota. Patikrinkite grįžimo suvestinę.';window.dispatchEvent(new Event('trip-plan-changed'))}
    };actions.append(b)}
    const item=state.items.find(x=>x.id===step.dataset.stopId);if(item){const b=el('button','Redaguoti');b.type='button';b.onclick=()=>edit(item);actions.append(b)}step.append(actions);
   }}
@@ -66,10 +69,10 @@
    const minutes=input('Lankymo trukmė minutėmis','number',item?.minutes??60,true);minutes.min='1';minutes.max='1440';
    const label=el('label','Kur išsaugoti'),select=el('select');select.setAttribute('aria-label','Kur išsaugoti');const o=el('option','Norimų vietų sąraše');o.value='';select.append(o);for(const d of config.days){const o=el('option',d.title);o.value=d.id;select.append(o)}select.value=item?.dayId||'';label.append(select);form.append(label);
    const afterLabel=el('label','Įterpti po'),after=el('select');after.setAttribute('aria-label','Įterpti po');afterLabel.append(after);form.append(afterLabel);
-   const positions=()=>{after.replaceChildren();const o=el('option','Dienos pradžioje');o.value='';after.append(o);const day=days.find(d=>d.id===select.value);for(const s of day?.querySelectorAll('.step')||[]){if(s.dataset.stopId===item?.id)continue;const o=el('option',s.querySelector('.title').textContent);o.value=s.dataset.stopId;after.append(o)}afterLabel.hidden=!select.value;lat.required=lon.required=!!select.value;};select.onchange=positions;positions();
+   const positions=()=>{after.replaceChildren();const o=el('option','Dienos pradžioje');o.value='';after.append(o);const day=days.find(d=>d.id===select.value);for(const s of day?.querySelectorAll('.step')||[]){if(s.dataset.stopId===item?.id||terminalIds.has(s.dataset.stopId))continue;const o=el('option',s.querySelector('.title').textContent);o.value=s.dataset.stopId;after.append(o)}afterLabel.hidden=!select.value;lat.required=lon.required=!!select.value;};select.onchange=positions;positions();
    if(item?.dayId){const ids=[...days.find(d=>d.id===item.dayId).querySelectorAll('.step')].map(x=>x.dataset.stopId);after.value=ids[ids.indexOf(item.id)-1]||''}
    const noteLabel=el('label','Pastaba'),note=el('textarea');note.value=item?.note||'';note.maxLength=2000;noteLabel.append(note);form.append(noteLabel);
-   form.append(el('p','Trumpa Maps nuoroda koordinačių automatiškai neužpildo. Pridėjus stotelę, bendras grįžimo laikas dar neperskaičiuojamas.'));
+   form.append(el('p','Trumpa Maps nuoroda koordinačių automatiškai neužpildo. Pridėję stotelę, suvestinėje įrašykite trūkstamas kelio trukmes.'));
    const err=el('p');err.setAttribute('role','alert');form.append(err);
    const ok=el('button','Išsaugoti');ok.type='submit';const cancel=el('button','Atšaukti');cancel.type='button';cancel.onclick=()=>dialog.close();form.append(ok,cancel);
    form.onsubmit=e=>{e.preventDefault();if(!form.reportValidity())return;const n=name.value.trim();if(!n){err.textContent='Įrašykite pavadinimą.';return}

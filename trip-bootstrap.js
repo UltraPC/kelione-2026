@@ -23,6 +23,7 @@
     return;
   }
 
+  try{window.TripCore?.recover(localStorage)}catch{root.textContent='Nutrūkusio importo atkurti nepavyko. Duomenų nekeiskite; atlaisvinkite naršyklės vietos ir perkraukite puslapį.';return}
   const allowed=['europe-2026','alanya-2026'];
   const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
   const url=new URL(location.href);
@@ -66,13 +67,9 @@
     if(storageWarning){const p=document.createElement('p');p.className='trip-notice';p.setAttribute('role','alert');p.textContent='Nepavyko patikimai išsaugoti arba perkelti progreso. Sena kopija nepanaikinta. Eksportuokite atsarginę kopiją.';root.prepend(p)}
     const selector=document.getElementById('tripSelect');selector.value=id;
     selector.onchange=()=>{const next=new URL(location.href);next.searchParams.set('trip',selector.value);next.hash='';location.assign(next)};
-    document.getElementById('exportBackup').onclick=()=>{
-      try{const entries={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('kelione2026.'))entries[k]=localStorage.getItem(k)}
-        const blob=new Blob([JSON.stringify({format:'kelione2026-backup',version:1,createdAt:new Date().toISOString(),entries},null,2)],{type:'application/json'});
-        const href=URL.createObjectURL(blob),a=document.createElement('a');a.href=href;a.download='keliones-atsargine-kopija.json';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000);
-      }catch{alert('Atsarginės kopijos paruošti nepavyko. Duomenys nepakeisti.')}
-    };
     window.TripPlanner?.prepare(window.TRIP_CONFIG);
+    window.TripTiming?.prepare(window.TRIP_CONFIG);
+    window.TripBackup?.setup();
     const script=document.createElement('script');script.src='./app-v6.js';script.onerror=()=>{root.prepend(Object.assign(document.createElement('p'),{textContent:'Nepavyko įkelti programos. Pabandykite atnaujinti puslapį.'}))};document.body.append(script);
   }catch(error){root.textContent=error.message+'. Patikrinkite ryšį ir atnaujinkite puslapį.'}
 })();
