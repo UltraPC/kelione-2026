@@ -10,7 +10,7 @@
       if(x.dayId&&(!config.days.some(d=>d.id===x.dayId)||!Number.isFinite(x.lat)||!Number.isFinite(x.lon)||Math.abs(x.lat)>90||Math.abs(x.lon)>180))throw Error();}
     for(const order of Object.values(state.order))if(!Array.isArray(order)||order.some(id=>typeof id!=='string')||new Set(order).size!==order.length)throw Error();}}catch{broken=true;state={items:[],order:{}}}
   const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
-  const save=next=>{if(broken){alert('Plano duomenys neįskaitomi. Pirmiausia eksportuokite atsarginę kopiją.');return false}try{localStorage.setItem(key,JSON.stringify(next));state=next;return true}catch{alert('Pakeitimų išsaugoti nepavyko. Ankstesnis planas nepakeistas.');return false}};
+  const save=next=>{if(broken){alert('Plano duomenys neįskaitomi. Pirmiausia eksportuokite atsarginę kopiją.');return false}try{localStorage.setItem(key,JSON.stringify(next));state=next;window.dispatchEvent(new Event('trip-saved'));try{sessionStorage.setItem('trip-save-message','Plano pakeitimai išsaugoti.')}catch{}return true}catch{alert('Pakeitimų išsaugoti nepavyko. Ankstesnis planas nepakeistas.');return false}};
   const root=document.getElementById('tripRoot'),days=[...root.querySelectorAll('.day')];
   const status=el('p','', 'planner-status');status.setAttribute('role','status');
   const bar=el('div',undefined,'mode-bar');bar.setAttribute('aria-label','Programos rodinys');
@@ -21,7 +21,7 @@
   bar.append(travel,plan,daySelect);document.querySelector('.trip-picker').after(bar);
   const panel=el('section',undefined,'planning-panel');const add=el('button','+ Pridėti vietą');add.type='button';
   const wish=el('div');panel.append(add,el('h2','Norimos aplankyti vietos'),wish);bar.after(panel);panel.after(status);
-  const notice=el('p','Grįžimo įvertį rasite dienos suvestinėje. Kortelėse pateikti pirminio plano atvykimo laikai.','trip-notice');notice.hidden=true;status.after(notice);
+  const notice=el('p','Grįžimo įvertį rasite dienos suvestinėje. Kortelėse pateikti perskaičiuoti laikai; trūkstamus atkarpų įverčius įrašykite nustatymuose.','trip-notice');notice.hidden=true;status.after(notice);
   const refreshNotice=()=>{const changed=state.items.some(x=>x.dayId)||Object.keys(state.order).length>0;notice.hidden=!changed;document.body.dataset.planChanged=String(changed)};
   const returnLink=el('a','Grįžti į dienos pabaigos vietą','return-link');bar.append(returnLink);
   function selectDay(){

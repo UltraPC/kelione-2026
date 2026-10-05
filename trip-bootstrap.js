@@ -68,8 +68,9 @@
     const selector=document.getElementById('tripSelect');selector.value=id;
     selector.onchange=()=>{const next=new URL(location.href);next.searchParams.set('trip',selector.value);next.hash='';location.assign(next)};
     window.TripPlanner?.prepare(window.TRIP_CONFIG);
+    window.TripUX?.prepare(window.TRIP_CONFIG);
     window.TripTiming?.prepare(window.TRIP_CONFIG);
     window.TripBackup?.setup();
-    const script=document.createElement('script');script.src='./app-v6.js';script.onerror=()=>{root.prepend(Object.assign(document.createElement('p'),{textContent:'Nepavyko įkelti programos. Pabandykite atnaujinti puslapį.'}))};document.body.append(script);
+    const script=document.createElement('script');script.src='./app-v6.js';script.onload=()=>window.TripUX?.ready();script.onerror=()=>{root.prepend(Object.assign(document.createElement('p'),{textContent:'Nepavyko įkelti programos. Pabandykite atnaujinti puslapį.'}))};document.body.append(script);
   }catch(error){root.textContent=error.message+'. Patikrinkite ryšį ir atnaujinkite puslapį.'}
 })();

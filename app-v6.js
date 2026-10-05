@@ -10,13 +10,15 @@
   let skipped=new Set();try{skipped=new Set(JSON.parse(localStorage.getItem(SKIP_KEY)||'[]'))}catch{}
   const terminalIds=new Set(config.days.flatMap(d=>(d.stops||[]).filter(s=>s.terminal).map(s=>s.id)));
   for(const id of terminalIds)skipped.delete(id);
-  const pending=s=>!visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId);
+  const pending=s=>(window.TripTiming?.isRemaining(s.dataset.visitId)??true)&&!visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId);
   let visited=new Set(), lastTouched=-1, activeDay=null, scrollTick=false;
   let deferredInstallPrompt=null, tripMap=null, mapLayerGroup=null, gpsMarker=null;
   let mapFilter='all', geocoding=false, geocodeDone=0, geocodeTotal=0;
   const safeParse=(v,f)=>{try{return JSON.parse(v)}catch(e){return f}};
   const loadVisited=()=>{try{visited=new Set(safeParse(localStorage.getItem(STORAGE_KEY),config.migrated||[])||config.migrated||[])}catch(e){visited=new Set(config.migrated||[])}};
-  function commitStatus(nextVisited,nextSkipped){
+  let previousProgress=null;
+  window.TripProgress={undo(){if(!previousProgress)return false;const old=previousProgress;const ok=commitStatus(old.visited,old.skipped,false);if(ok){previousProgress=null;update([...document.querySelectorAll('.step')],[...document.querySelectorAll('.day')]);if(tripMap)renderMap([...document.querySelectorAll('.step')],[...document.querySelectorAll('.day')])}return ok}};
+  function commitStatus(nextVisited,nextSkipped,remember=true){
     let oldVisited,oldSkipped;
     try{
       oldVisited=localStorage.getItem(STORAGE_KEY);oldSkipped=localStorage.getItem(SKIP_KEY);
@@ -27,7 +29,8 @@
         if(oldSkipped===null)localStorage.removeItem(SKIP_KEY);else if(oldSkipped!==undefined)localStorage.setItem(SKIP_KEY,oldSkipped)}catch{}
       toast('Nepavyko išsaugoti progreso. Pakeitimas neatliktas.',5000);return false;
     }
-    visited=nextVisited;skipped=nextSkipped;return true;
+    if(remember)previousProgress={visited:new Set(visited),skipped:new Set(skipped)};
+    visited=nextVisited;skipped=nextSkipped;window.dispatchEvent(new CustomEvent('trip-saved',{detail:{undo:remember}}));return true;
   }
   const getGeo=()=>{try{return safeParse(localStorage.getItem(GEO_KEY),{})||{}}catch(e){return {}}};
   const saveGeo=g=>{try{localStorage.setItem(GEO_KEY,JSON.stringify(g))}catch(e){}};
@@ -51,10 +54,10 @@
       return dur+s;
     }
     if(/grįžti/.test(title))return dur+' Tai kontrolinis grįžimo taškas; jį pažymėjus programa tiksliai persijungs į kitą etapą.';
-    if(/nakvyn|lodge|hotel urirotstock|via adda/.test(title))return 'Tai dienos finišo / nakvynės taškas. Atvykę pažymėkite stotelę; kitą rytą programa automatiškai rodys pirmą neaplankytą vietą.';
+    if(/nakvyn|lodge|hotel urirotstock|via adda/.test(title))return 'Tai dienos finišo / nakvynės taškas. Atvykę pažymėkite stotelę; kitą rytą pasirinkite kitą dieną.';
     if(/pass|chasseral|panorama|rhône glacier|grimsel|nufenen/.test(title))return dur+' Aukštikalnėse oras ir kelių būklė gali keistis greitai; prieš išvykstant patikrinkite oficialią kelių informaciją, turėkite šiltesnį sluoksnį ir sustokite tik saugiose aikštelėse.';
     if(mode==='walking')return dur+' Etapas suplanuotas pėsčiomis. Naudokite „EITI“, o pasiekę vietą pažymėkite ją kaip aplankytą.';
-    return dur+' „VAŽIUOTI“ atidaro tikslią šios stotelės Google Maps navigaciją. Atvykę pažymėkite stotelę – progreso žemėlapyje ši dalis taps žalia.';
+    return dur+' „VAŽIUOTI“ atidaro šios stotelės Google Maps navigaciją. Atvykę pažymėkite stotelę – progreso žemėlapyje ši dalis taps žalia.';
   }
 
   function prepareStepUI(step){
@@ -139,18 +142,14 @@
     registerSW();
     setTimeout(()=>backgroundGeocode(allSteps),1800);
 
-    requestAnimationFrame(()=>setTimeout(()=>{
-      const firstUnvisited=allSteps.find(s=>!s.closest('.day').hidden&&pending(s));
-      const target=firstUnvisited||activeDay?.querySelector('.step');
-      if(target&&document.body.dataset.mode!=='plan'){target.scrollIntoView({behavior:'auto',block:'center'});flash(target);const d=target.closest('.day');if(d)setActiveDay(d,days,index)}
-    },180));
+
   }
 
   function setupMenu(days,allSteps){
     const btn=document.getElementById('menuBtn'), menu=document.getElementById('quickMenu');
     btn.onclick=e=>{e.stopPropagation();menu.classList.toggle('open')};
     document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==btn)menu.classList.remove('open')});
-    document.getElementById('offlineInfo').onclick=()=>toast(navigator.onLine?'Online · planą be ryšio naudokite po sėkmingo atnaujinimo':'Be interneto · žemėlapis ir navigacija gali neveikti',3200);
+    document.getElementById('offlineInfo').onclick=()=>window.TripUX?.checkOffline();
     document.getElementById('refreshOffline').onclick=async()=>{menu.classList.remove('open');try{const r=await navigator.serviceWorker?.getRegistration();await r?.update();toast('Offline kopija patikrinta / atnaujinama')}catch(e){toast('Atnaujinti nepavyko')}};
     document.getElementById('resetProgress').onclick=()=>{if(confirm(`Atstatyti tik kelionės „${config.title}“ ${allSteps.length} stotelių progresą?`)){
       if(!commitStatus(new Set(),new Set()))return;lastTouched=-1;update(allSteps,days);toast('Progresas atstatytas');
@@ -274,26 +273,17 @@
   }
   const escapeHtml=s=>(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  function clockToMin(v){const m=(v||'').match(/(\d{1,2}):(\d{2})/);return m?(+m[1])*60+(+m[2]):null}
-  function getDeparture(meta){const ms=[...(meta||'').matchAll(/(\d{1,2}:\d{2})/g)];if(ms.length<2||/kitą dieną/i.test(meta))return null;return clockToMin(ms[1][1])}
-  function plannedDrivingMinutes(allSteps){
-    let total=0,done=0;const days=[...document.querySelectorAll('.day')];
-    days.forEach(day=>{const steps=[...day.querySelectorAll('.step')];let prev=clockToMin(day.querySelector('.sub')?.textContent||'');
-      steps.forEach(step=>{const meta=step.querySelector('.meta')?.textContent||'';const arr=clockToMin(meta);if(step.dataset.mode==='driving'&&prev!=null&&arr!=null){let d=arr-prev;if(d<0)d+=1440;if(d>=0&&d<600&&allSteps.includes(step)){total+=d;if(visited.has(step.dataset.visitId))done+=d}}const dep=getDeparture(meta);if(dep!=null)prev=dep;});
-    });return {total,done,left:Math.max(0,total-done)}
-  }
-  function fmtMin(m){const h=Math.floor(m/60),mm=m%60;return h?`${h} val. ${mm?mm+' min.':''}`:`${mm} min.`}
   function updateMapStats(allSteps){
     const done=allSteps.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;
     const drive=allSteps.filter(s=>s.dataset.mode==='driving'),driveDone=drive.filter(s=>visited.has(s.dataset.visitId)&&!skipped.has(s.dataset.visitId)).length;
     const changed=skipped.size>0||!!document.querySelector('.step[data-custom]')||document.body.dataset.planChanged==='true';
-    const t=plannedDrivingMinutes(allSteps), road=changed?null:getRoad(), el=document.getElementById('mapStats');if(!el)return;
+    const road=changed?null:getRoad(), el=document.getElementById('mapStats');if(!el)return;
     let kmDone=0,kmLeft=null;
     if(road?.perStep){drive.forEach(s=>{if(visited.has(s.dataset.visitId))kmDone+=road.perStep[s.dataset.visitId]||0});kmLeft=drive.filter(s=>!visited.has(s.dataset.visitId)).reduce((sum,s)=>sum+(road.perStep[s.dataset.visitId]||0),0)}
     const kmDoneText=changed?'Neperskaičiuota':road?`${Math.round(kmDone)} km`:'skaičiuojama…',kmLeftText=changed?'Neperskaičiuota':road?`${Math.round(kmLeft)} km`:'skaičiuojama…';
     el.innerHTML=`<div>Aplankyta<br><b>${done}/${allSteps.length}</b></div><div>Automobilio etapai<br><b>${driveDone}/${drive.length}</b></div>
       <div>Nuvažiuota pagal planą<br><b>${kmDoneText}</b></div><div>Liko važiuoti<br><b>${kmLeftText}</b></div>
-      <div>Planinio vairavimo įveikta<br><b>${changed?'Neperskaičiuota':fmtMin(t.done)}</b></div><div>Planinio vairavimo liko<br><b>${changed?'Neperskaičiuota':fmtMin(t.left)}</b></div>
+      <div>Laiko įverčiai<br><b>Dienos suvestinėje</b></div>
       <div class="map-legend">Žalia – aplankyta, mėlyna – liko, oranžinė – kita vieta, violetinis kontūras / punktyras – pėsčiomis. Kilometrai yra orientaciniai, skaičiuojami vieną kartą pagal OpenStreetMap/OSRM ir išsaugomi telefone. Linijos jungia suplanuotas stoteles ir nėra tiksli kelio geometrija; konkrečiai navigacijai naudokite „VAŽIUOTI / EITI“.</div>`;
   }
 
@@ -335,7 +325,7 @@
 
   async function registerSW(){
     if(!('serviceWorker' in navigator)){toast('Naršyklė nepalaiko offline režimo');return}
-    try{await navigator.serviceWorker.register('./sw.js',{scope:'./'});await navigator.serviceWorker.ready;setTimeout(()=>toast('Programos offline modulis įjungtas; žemėlapis priklauso nuo ryšio'),900)}
+    try{await navigator.serviceWorker.register('./sw.js',{scope:'./'});await navigator.serviceWorker.ready;window.dispatchEvent(new Event('trip-worker-ready'))}
     catch(e){toast('Offline kopijos paruošti nepavyko',3200)}
   }
 
