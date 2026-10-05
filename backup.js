@@ -2,7 +2,7 @@
  'use strict';const C=window.TripCore;
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n};
  window.TripBackup={setup(){
-  const header=document.querySelector('.trip-picker'),input=el('input');input.type='file';input.accept='.json,application/json';input.hidden=true;
+  const header=document.querySelector('#tripToolsBody')||document.querySelector('.trip-picker'),input=el('input');input.type='file';input.accept='.json,application/json';input.hidden=true;
   const button=el('button','Importuoti kopiją'),undo=el('button','Atšaukti paskutinį importą');button.type=undo.type='button';header.append(button,undo,input);undo.hidden=!localStorage.getItem(C.PREVIOUS);
   document.getElementById('exportBackup').onclick=()=>{try{const entries={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^kelione2026\.(europe-2026|alanya-2026)\.(visited\.v2|skipped\.v1|plan\.v1|timing\.v1|view|day)$/.test(k)||k==='kelione2026.visited.v1')entries[k]=localStorage.getItem(k)}const href=URL.createObjectURL(new Blob([JSON.stringify({format:'kelione2026-backup',version:2,createdAt:new Date().toISOString(),entries},null,2)],{type:'application/json'})),a=el('a');a.href=href;a.download='keliones-atsargine-kopija.json';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000)}catch{alert('Kopijos paruošti nepavyko.')}};
   button.onclick=()=>input.click();

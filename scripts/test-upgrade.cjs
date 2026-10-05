@@ -15,5 +15,5 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
  await page.reload();await page.getByRole('button',{name:'Įjungti naują versiją',exact:true}).click();await page.locator('#tripSelect').waitFor();await page.waitForFunction(()=>!!window.TRIP_CONFIG);
  await page.locator('.visit-btn').first().waitFor();assert.equal(await page.locator('.step.visited').count(),2);assert.equal(await page.locator('.visit-btn').count(),65);assert.equal(await page.locator('#activeDayBar').count(),1);
  assert.equal(await page.evaluate(()=>localStorage.getItem('kelione2026.visited.v1')),'["d1-s1","d2-s1"]');
- console.log('PASS v5 → stage3: old cached shell transition, explicit update, 65 single buttons, migrated 2 visited stops and intact original.');await browser.close();server.close();
+ console.log('PASS v5 → stage4: old cached shell transition, explicit update, 65 single buttons, migrated 2 visited stops and intact original.');await browser.close();server.close();
 })().catch(e=>{console.error(e);process.exit(1)});
